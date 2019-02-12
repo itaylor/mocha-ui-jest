@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`simplest test expect works 1`] = `
+Array [
+  Object {
+    "that": "this",
+  },
+]
+`;
+
+exports[`simplest test multiple snapshots in one test work 1`] = `
+Object {
+  "foo": "bar",
+}
+`;
+
+exports[`simplest test multiple snapshots in one test work 2`] = `
+Object {
+  "bar": "foo",
+}
+`;

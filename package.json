@@ -1,0 +1,17 @@
+{
+  "name": "mocha-ui-jest",
+  "version": "1.0.0",
+  "description": "A test interface for mocha that mimics jest's API",
+  "main": "index.js",
+  "author": "ian.b.taylor@gmail.com",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "expect": "1.20.x",
+    "jest-snapshot": "^24.1.0",
+    "mocha": "6.0.0-1"
+  },
+  "scripts": {
+    "test": "mocha --require index.js --ui=jest '*.test.js'"
+  }
+}
