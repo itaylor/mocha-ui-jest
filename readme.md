@@ -23,6 +23,11 @@ describe('some test', () => {
   });
 ]);
 ```
+If you want to regenerate your snapshots, use the env var `SNAPSHOT_UPDATE=true`
+
+```bash
+SNAPSHOT_UPDATE=true mocha --require mocha-ui-jest --ui jest <pathToYourTestFile.test.js>
+```
 
 ### Image Snapshot Support
 
@@ -37,10 +42,10 @@ describe('some test', () => {
 ]);
 ```
 
-### Allowing snapshot failures to not cause test failures
+### Prevent image snapshot failures from being treated as test failures
 For visual regression testing, it can be desirable to treat image snapshot failures as a warnings that don't fail the build, and capture the diff files to put them into some other system for later review and acceptance.
 
-To do that, you can use `setImageSnapshotConfig` to set `imageFailuresThrow` to `false`.
+To do that, you can use `setImageSnapshotConfig` to set `imageFailuresThrow` to `false`.  You can then listen for the event and handle it as appropriate for your use case.
 
 ```js
 const { imageSnapshotSupport } = require('mocha-ui-jest');
@@ -60,7 +65,11 @@ describe('image snapshot config', () => {
 })
 
 ```
+
 ## What's missing
-This is still using `expect` 1.20.x and doesn't yet have support for jest's mocking features.  I'd also like to add a custom reporter that reports snapshot add
+This is still using `expect` 1.20.x and doesn't yet have support for jest's mocking features.  I'd also like to add a custom reporter that reports snapshot and image snapshot creation.
+
+## Other gotcha's
+This requires Mocha 6, which is currently in pre-release.
 
 ## License: MIT
