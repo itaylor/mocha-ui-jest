@@ -29,6 +29,7 @@ describe('image snapshot events test', () => {
     setImageSnapshotConfig({ imageFailuresThrow: false });
     expect(makeNewRandomImageBuffer()).toMatchImageSnapshot();
     expect(state).toMatchSnapshot();
+    setImageSnapshotConfig({ imageFailuresThrow: true });
   });
 
   test('expect works while firing add events', () => {
