@@ -15,34 +15,35 @@ yarn add --dev mocha-ui-jest
 mocha --require mocha-ui-jest --ui jest <pathToYourTestFile.test.js>
 ```
 
-Then you can write test files work like your Jest tests:
+Then you can write test files that work like your Jest tests:
 ```js
 describe('some test', () => {
   test('with snapshots', () => {
     expect([{ that: 'this' }]).toMatchSnapshot();
   });
+]);
 ```
 
 ### Image Snapshot Support
 
-This Mocha UI also includes support for making image snapshots
+This Mocha UI also includes support for making comparisons of image snapshots
 
 ```js
 describe('some test', () => {
   test('with image snapshots', () => {
-    test('multiple image assertions work', () => {
     const buf1 = require('fs').readFileSync(`${__dirname}/fixtures/test-1.png`);
     expect(buf1).toMatchImageSnapshot();
   });
+]);
 ```
 
 ### Allowing snapshot failures to not cause test failures
-For visual regression testing, it can be desirable to essentially treat image snapshot failures as a warnings instead of a failures and capture the diff files to put them into some other system.
+For visual regression testing, it can be desirable to treat image snapshot failures as a warnings that don't fail the build, and capture the diff files to put them into some other system for later review and acceptance.
 
-To do that, you can use `setImageSnapshotConfig`.
+To do that, you can use `setImageSnapshotConfig` to set `imageFailuresThrow` to `false`.
 
 ```js
-const { imageSnapshotSupport } = require('mocha-ui-jest')
+const { imageSnapshotSupport } = require('mocha-ui-jest');
 const { emitter, events, setImageSnapshotConfig } = imageSnapshotSupport;
 
 describe('image snapshot config', () => { 
