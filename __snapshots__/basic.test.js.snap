@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`async tests with snapshots work 1`] = `
+Object {
+  "before": "sleep",
+}
+`;
+
+exports[`async tests with snapshots work 2`] = `
+Object {
+  "after": "sleep",
+}
+`;
+
+exports[`expect works 1`] = `
+Array [
+  Object {
+    "that": "this",
+  },
+]
+`;
+
+exports[`multiple snapshots in one test work 1`] = `
+Object {
+  "foo": "bar",
+}
+`;
+
+exports[`multiple snapshots in one test work 2`] = `
+Object {
+  "bar": "foo",
+}
+`;

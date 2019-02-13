@@ -1,23 +1,26 @@
 const jestSnapshot = require('jest-snapshot');
-const { basename, dirname } = require('path');
+const { basename, dirname, relative } = require('path');
+const EventEmitter = require('events');
+const { buildTestContext, shouldUpdateSnapshots } = require('./utils.js');
+
+const events = {
+  SNAPSHOT_PASS: 'snapshotPass',
+  SNAPSHOT_FAIL: 'snapshotFail',
+};
+class SnapshotEmitter extends EventEmitter {}
+const emitter = new SnapshotEmitter();
 
 module.exports = {
   toMatchSnapshot,
-  toMatchImageSnapshot,
-  newSnapshotContext,
+  setTestContext,
+  emitter,
+  events,
 };
 
 let currentContext;
 let snapshotState;
-function newSnapshotContext(context) {
-  const r = context.currentTest || context.test || context._runnable;
-  const title = makeTestTitle(r);
-  currentContext = {
-    file: r.file,
-    name: r.name,
-    title,
-    snapshotCount: 0,
-  };
+function setTestContext(context) {
+  currentContext = buildTestContext(context);
   snapshotState = null;
 }
 
@@ -25,46 +28,32 @@ function toMatchSnapshot(name) {
   if (!currentContext) {
     throw new Error('Missing `context` for toMatchSnapshot');
   }
-  if (!snapshotState) {
-    const fileName = basename(currentContext.file);
-    const filePath = dirname(currentContext.file);
-    const snapshotPath = `${filePath}/__snapshots__/${fileName}.snap`;
+  const fileName = basename(currentContext.file);
+  const filePath = dirname(currentContext.file);
+  const snapshotFile = `${filePath}/__snapshots__/${fileName}.snap`;
 
-    snapshotState = new jestSnapshot.SnapshotState(snapshotPath, {
-      updateSnapshot: process.env.SNAPSHOT_UPDATE ? 'all' : 'new',
+  if (!snapshotState) {
+    snapshotState = new jestSnapshot.SnapshotState(snapshotFile, {
+      updateSnapshot: shouldUpdateSnapshots() ? 'all' : 'new',
     });
   }
-
   const matcher = jestSnapshot.toMatchSnapshot.bind({
     snapshotState,
     currentTestName: currentContext.title,
   });
-
   const result = matcher(this.actual, name);
   snapshotState.save();
-
-  expect.assert(result.pass, !result.pass ? result.report() : '');
-
-  return this;
-}
-
-function toMatchImageSnapshot() {
-  const img = this.actual;
-  console.log(img);
-}
-
-function makeTestTitle(test) {
-  let next = test;
-  const title = [];
-
-  for (; ;) {
-    if (!next.parent) {
-      break;
-    }
-
-    title.push(next.title);
-    next = next.parent;
+  const resultObj = {
+    title: currentContext.title,
+    fullTitle: currentContext.fullTitle,
+    file: relative(process.cwd(), currentContext.file),
+    snapshotFile: relative(process.cwd(), snapshotFile),
+  };
+  let evt = events.SNAPSHOT_FAIL;
+  if (result.pass) {
+    evt = events.SNAPSHOT_PASS;
   }
-
-  return title.reverse().join(' ');
+  emitter.emit(evt, resultObj);
+  expect.assert(result.pass, !result.pass ? result.report() : '');
+  return this;
 }

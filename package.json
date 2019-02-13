@@ -7,11 +7,22 @@
   "license": "MIT",
   "private": false,
   "dependencies": {
+    "dashify": "^2.0.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "jest-image-snapshot": "^2.8.1",
+    "jest-snapshot": "^24.1.0"
+  },
+  "peerDependencies": {
+    "mocha": "6.0.0-1"
+  },
+  "devDependencies": {
+    "eslint": "^5.13.0",
     "expect": "1.20.x",
-    "jest-snapshot": "^24.1.0",
     "mocha": "6.0.0-1"
   },
   "scripts": {
+    "lint": "eslint *.js",
     "test": "mocha --require index.js --ui=jest '*.test.js'"
   }
 }

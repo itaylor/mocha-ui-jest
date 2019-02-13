@@ -1,16 +1,15 @@
 const commonInterface = require('mocha/lib/interfaces/common.js');
 const expect = require('expect');
 const Mocha = require('mocha');
-const { toMatchSnapshot, newSnapshotContext, toMatchImageSnapshot } = require('./snapshotSupport.js');
+const snapshotSupport = require('./snapshotSupport.js');
+const imageSnapshotSupport = require('./imageSnapshotSupport.js');
 
-console.log(Mocha);
 const { Suite, Test, interfaces } = Mocha;
-
 /**
  * Jest Style Interface with Expect and Snapshots
  *      describe('Array', function() {
- *          test('should return -1 when not present', function() {
- *            // ...
+ *          test('should return -1 when not present', () => {
+ *            expect(arr.indexOf('foo')).toBe(-1);
  *          });
  *
  *          it('should return the index when present', function() {
@@ -19,7 +18,6 @@ const { Suite, Test, interfaces } = Mocha;
  *        });
  *      });
  *
- * @param {Suite} suite Root suite.
  */
 function jestInterface(suite) {
   const suites = [suite];
@@ -28,8 +26,8 @@ function jestInterface(suite) {
     const common = commonInterface(suites, context, mocha);
 
     expect.extend({
-      toMatchSnapshot,
-      toMatchImageSnapshot,
+      toMatchSnapshot: snapshotSupport.toMatchSnapshot,
+      toMatchImageSnapshot: imageSnapshotSupport.toMatchImageSnapshot,
     });
     context.expect = expect;
     context.beforeAll = common.before;
@@ -59,7 +57,7 @@ function jestInterface(suite) {
     context.test = test;
     context.test.only = (title, fn) => {
       const t = test(title, fn);
-      test.parent._onlyTests = test.parent._onlyTests.concat(t);
+      suites[0]._onlyTests = suites[0]._onlyTests.concat(t);
       return t;
     };
     context.test.skip = title => test(title);
@@ -80,31 +78,31 @@ function jestInterface(suite) {
     }
 
     function createSuite(opts) {
-      const suite = Suite.create(suites[0], opts.title);
-      suite.pending = Boolean(opts.pending);
-      suite.file = opts.file;
-      suites.unshift(suite);
+      const s = Suite.create(suites[0], opts.title);
+      s.pending = Boolean(opts.pending);
+      s.file = opts.file;
+      suites.unshift(s);
       if (opts.isOnly) {
-        if (mocha.options.forbidOnly && shouldBeTested(suite)) {
+        if (mocha.options.forbidOnly && shouldBeTested(s)) {
           throw new Error('`.only` forbidden');
         }
-        suite.parent._onlySuites = suite.parent._onlySuites.concat(suite);
+        s.parent._onlySuites = s.parent._onlySuites.concat(s);
       }
-      if (suite.pending) {
-        if (mocha.options.forbidPending && shouldBeTested(suite)) {
+      if (s.pending) {
+        if (mocha.options.forbidPending && shouldBeTested(s)) {
           throw new Error('Pending test forbidden');
         }
       }
       if (typeof opts.fn === 'function') {
         wireContextCapture();
-        opts.fn.call(suite);
+        opts.fn.call(s);
         suites.shift();
-      } else if (typeof opts.fn === 'undefined' && !suite.pending) {
-        throw new Error(`Suite ${suite.fullTitle()} was defined but no callback was supplied. Supply a callback or explicitly skip the suite.`);
-      } else if (!opts.fn && suite.pending) {
+      } else if (typeof opts.fn === 'undefined' && !s.pending) {
+        throw new Error(`Suite ${s.fullTitle()} was defined but no callback was supplied. Supply a callback or explicitly skip the suite.`);
+      } else if (!opts.fn && s.pending) {
         suites.shift();
       }
-      return suite;
+      return s;
     }
 
     function wireContextCapture() {
@@ -115,21 +113,23 @@ function jestInterface(suite) {
     }
 
     function captureContext() {
-      newSnapshotContext(this);
+      snapshotSupport.setTestContext(this);
+      imageSnapshotSupport.setTestContext(this);
     }
 
     function shouldBeTested(testSuite) {
       return (
-        !mocha.options.grep ||
-        (mocha.options.grep &&
-          mocha.options.grep.test(testSuite.fullTitle()) &&
-          !mocha.options.invert)
+        !mocha.options.grep
+        || (mocha.options.grep
+          && mocha.options.grep.test(testSuite.fullTitle())
+          && !mocha.options.invert)
       );
     }
   });
-};
+}
 
 module.exports = jestInterface;
-interfaces['jest'] = jestInterface;
-
-module.exports.description = 'Jest style test with expect and snapshots';
+interfaces.jest = jestInterface;
+jestInterface.description = 'Jest style test with expect and snapshots';
+jestInterface.imageSnapshotSupport = imageSnapshotSupport;
+jestInterface.snapshotSupport = snapshotSupport;
