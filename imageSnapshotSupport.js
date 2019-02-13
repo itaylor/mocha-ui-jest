@@ -34,7 +34,7 @@ function setTestContext(context) {
 }
 
 function setImageSnapshotConfig(config) {
-  imageConfig = Object.extend({}, imageConfigDefaults, config);
+  imageConfig = Object.assign({}, imageConfigDefaults, config);
 }
 
 function toMatchImageSnapshot() {
@@ -71,7 +71,7 @@ function toMatchImageSnapshot() {
     snapshotFile: relative(process.cwd(), snapshotFileName),
   };
   if (diffOutputPath) {
-    resultObj.diffOutputPath = diffOutputPath;
+    resultObj.diffOutputPath = relative(process.cwd(), diffOutputPath);
   }
   let evt = events.IMAGE_SNAPSHOT_FAIL;
   if (updated) {

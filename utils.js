@@ -14,7 +14,7 @@ function buildTestContext(context) {
 }
 
 function shouldUpdateSnapshots() {
-  return !!process.env.SNAPSHOT_UPDATE;
+  return process.env.SNAPSHOT_UPDATE === true || process.env.SNAPSHOT_UPDATE === 'true';
 }
 
 function makeTestTitle(test) {

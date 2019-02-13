@@ -3,7 +3,7 @@
 exports[`expect works while firing fail events 1`] = `
 Array [
   Object {
-    "fails": 0.3324456248601526,
+    "fails": 0.48196021454099003,
   },
 ]
 `;

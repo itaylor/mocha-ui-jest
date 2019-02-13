@@ -19,7 +19,8 @@
   "devDependencies": {
     "eslint": "^5.13.0",
     "expect": "1.20.x",
-    "mocha": "6.0.0-1"
+    "mocha": "6.0.0-1",
+    "rimraf": "^2.6.3"
   },
   "scripts": {
     "lint": "eslint *.js",
