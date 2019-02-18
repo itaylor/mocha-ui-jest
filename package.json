@@ -1,6 +1,6 @@
 {
   "name": "mocha-ui-jest",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A test interface for mocha that mimics jest's API",
   "main": "index.js",
   "author": "ian.b.taylor@gmail.com",
@@ -25,6 +25,6 @@
   },
   "scripts": {
     "lint": "eslint *.js",
-    "test": "mocha --require index.js --ui=jest '*.test.js'"
+    "test": "mocha --require index.js  --reporter reporter.js --ui jest '*.test.js'"
   }
 }

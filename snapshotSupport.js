@@ -6,6 +6,8 @@ const { buildTestContext, shouldUpdateSnapshots } = require('./utils.js');
 const events = {
   SNAPSHOT_PASS: 'snapshotPass',
   SNAPSHOT_FAIL: 'snapshotFail',
+  SNAPSHOT_UPDATE: 'snapshotUpdate',
+  SNAPSHOT_ADD: 'snapshotAdd',
 };
 class SnapshotEmitter extends EventEmitter {}
 const emitter = new SnapshotEmitter();
@@ -37,12 +39,16 @@ function toMatchSnapshot(name) {
       updateSnapshot: shouldUpdateSnapshots() ? 'all' : 'new',
     });
   }
+  const snapshotStateAddedBefore = snapshotState.added;
+  const snapshotStateUpdatedBefore = snapshotState.updated;
   const matcher = jestSnapshot.toMatchSnapshot.bind({
     snapshotState,
     currentTestName: currentContext.title,
   });
   const result = matcher(this.actual, name);
   snapshotState.save();
+  const snapshotStateAddedAfter = snapshotState.added;
+  const snapshotStateUpdatedAfter = snapshotState.updated;
   const resultObj = {
     title: currentContext.title,
     fullTitle: currentContext.fullTitle,
@@ -50,7 +56,11 @@ function toMatchSnapshot(name) {
     snapshotFile: relative(process.cwd(), snapshotFile),
   };
   let evt = events.SNAPSHOT_FAIL;
-  if (result.pass) {
+  if (snapshotStateAddedAfter > snapshotStateAddedBefore) {
+    evt = events.SNAPSHOT_ADD;
+  } else if (snapshotStateUpdatedAfter > snapshotStateUpdatedBefore) {
+    evt = events.SNAPSHOT_UPDATE;
+  } else if (result.pass) {
     evt = events.SNAPSHOT_PASS;
   }
   emitter.emit(evt, resultObj);

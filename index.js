@@ -3,6 +3,9 @@ const expect = require('expect');
 const Mocha = require('mocha');
 const snapshotSupport = require('./snapshotSupport.js');
 const imageSnapshotSupport = require('./imageSnapshotSupport.js');
+const ImageSnapshotAccumulator = require('./ImageSnapshotAccumulator.js');
+const SnapshotAccumulator = require('./SnapshotAccumulator.js');
+
 
 const { Suite, Test, interfaces } = Mocha;
 /**
@@ -133,3 +136,5 @@ interfaces.jest = jestInterface;
 jestInterface.description = 'Jest style test with expect and snapshots';
 jestInterface.imageSnapshotSupport = imageSnapshotSupport;
 jestInterface.snapshotSupport = snapshotSupport;
+jestInterface.ImageSnapshotAccumulator = ImageSnapshotAccumulator;
+jestInterface.SnapshotAccumulator = SnapshotAccumulator;

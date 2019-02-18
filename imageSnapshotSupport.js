@@ -76,10 +76,10 @@ function toMatchImageSnapshot() {
   let evt = events.IMAGE_SNAPSHOT_FAIL;
   if (updated) {
     evt = events.IMAGE_SNAPSHOT_UPDATE;
-  } else if (pass) {
-    evt = events.IMAGE_SNAPSHOT_PASS;
   } else if (added) {
     evt = events.IMAGE_SNAPSHOT_ADD;
+  } else if (pass) {
+    evt = events.IMAGE_SNAPSHOT_PASS;
   }
   emitter.emit(evt, resultObj);
   if (!added && !updated && imageConfig.imageFailuresThrow) {
