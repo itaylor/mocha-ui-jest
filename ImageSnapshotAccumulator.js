@@ -10,6 +10,7 @@ module.exports = class ImageSnapshotAccumulator {
       addCount: 0,
       updateCount: 0,
       failures: [],
+      additions: [],
     };
     this.listeners = {
       [events.IMAGE_SNAPSHOT_PASS]: () => {
@@ -19,8 +20,9 @@ module.exports = class ImageSnapshotAccumulator {
         this.state.failCount++;
         this.state.failures.push(testContext);
       },
-      [events.IMAGE_SNAPSHOT_ADD]: () => {
+      [events.IMAGE_SNAPSHOT_ADD]: (testContext) => {
         this.state.addCount++;
+        this.state.additions.push(testContext);
       },
       [events.IMAGE_SNAPSHOT_UPDATE]: () => {
         this.state.updateCount++;

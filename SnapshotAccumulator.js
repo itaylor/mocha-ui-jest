@@ -9,7 +9,8 @@ module.exports = class SnapshotAccumulator {
       updateCount: 0,
       passCount: 0,
       failCount: 0,
-      faiures: [],
+      failures: [],
+      additions: [],
     };
     this.listeners = {
       [events.SNAPSHOT_PASS]: () => {
@@ -19,8 +20,9 @@ module.exports = class SnapshotAccumulator {
         this.state.failCount++;
         this.state.failures.push(testContext);
       },
-      [events.SNAPSHOT_ADD]: () => {
+      [events.SNAPSHOT_ADD]: (testContext) => {
         this.state.addCount++;
+        this.state.additions.push(testContext);
       },
       [events.SNAPSHOT_UPDATE]: () => {
         this.state.updateCount++;

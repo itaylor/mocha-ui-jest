@@ -68,7 +68,7 @@ function toMatchImageSnapshot() {
     title: currentContext.title,
     fullTitle: currentContext.fullTitle,
     file: relative(process.cwd(), currentContext.file),
-    snapshotFile: relative(process.cwd(), snapshotFileName),
+    snapshotFile: relative(process.cwd(), `${snapshotFileName}.png`),
   };
   if (diffOutputPath) {
     resultObj.diffOutputPath = relative(process.cwd(), diffOutputPath);
