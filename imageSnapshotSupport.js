@@ -37,9 +37,9 @@ function setImageSnapshotConfig(config) {
   imageConfig = Object.assign({}, imageConfigDefaults, config);
 }
 
-function toMatchImageSnapshot() {
+function toMatchImageSnapshot(actual) {
   currentContext.snapshotCount++;
-  const receivedImageBuffer = this.actual;
+  const receivedImageBuffer = actual;
   const fileName = basename(currentContext.file);
   const filePath = dirname(currentContext.file);
   const snapshotsDir = `${filePath}/__snapshots__`;
@@ -82,8 +82,8 @@ function toMatchImageSnapshot() {
     evt = events.IMAGE_SNAPSHOT_PASS;
   }
   emitter.emit(evt, resultObj);
-  if (!added && !updated && imageConfig.imageFailuresThrow) {
-    expect.assert(pass, `Image snapshot did not match for '${currentContext.title}'.  See diff at '${diffOutputPath}'`);
-  }
-  return this;
+  return {
+    pass: added || updated || pass || (!pass && !imageConfig.imageFailuresThrow),
+    message: () => `Image snapshot did not match for '${currentContext.title}'.  See diff at '${diffOutputPath}'`,
+  };
 }

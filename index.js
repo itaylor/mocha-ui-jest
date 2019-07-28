@@ -6,7 +6,6 @@ const imageSnapshotSupport = require('./imageSnapshotSupport.js');
 const ImageSnapshotAccumulator = require('./ImageSnapshotAccumulator.js');
 const SnapshotAccumulator = require('./SnapshotAccumulator.js');
 
-
 const { Suite, Test, interfaces } = Mocha;
 /**
  * Jest Style Interface with Expect and Snapshots

@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Snapshot assertions fail by throwing 1`] = `0.9360206344712325`;
+
 exports[`async tests with snapshots work 1`] = `
 Object {
   "before": "sleep",

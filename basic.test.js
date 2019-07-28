@@ -4,6 +4,8 @@ const { makeNewRandomImageBuffer } = require('./pngutils.js');
 describe('basic test', () => {
   test('expect works', () => {
     expect(true).toBe(true);
+    expect(1).toBe(1);
+    expect(1).not.toBe(2);
     expect([{ that: 'this' }]).toMatchSnapshot();
   });
 
@@ -29,6 +31,12 @@ describe('basic test', () => {
     expect(() => {
       expect(makeNewRandomImageBuffer()).toMatchImageSnapshot();
     }).toThrow(/Image snapshot did not match/);
+  });
+
+  test('Snapshot assertions fail by throwing', () => {
+    expect(() => {
+      expect(Math.random()).toMatchSnapshot();
+    }).toThrow(/Snapshot name: `Snapshot assertions fail by throwing 1`/);
   });
 });
 

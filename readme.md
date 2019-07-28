@@ -4,7 +4,7 @@ This is an attempt to brings as much of the Jest API as possible to Mocha.
 
 ### Why not just use Jest?
 
-Jest is great, I use it extensively for unit testing React app code.  However, when it comes to running integration tests that take image snapshots for visual regression testing, it's not so good.  The Jest API doesn't provide a way to get information about individual test cases starting or stopping (see [jest#4471](https://github.com/facebook/jest/issues/4471)).  The unit of work that jest reports on is a test file, not a single `test` (see [jest#6616](https://github.com/facebook/jest/issues/6616)).  Jest also does all kinds of strange things with stdout (see [jest#6718](https://github.com/facebook/jest/issues/6718), [jest#5918](https://github.com/facebook/jest/issues/5918)).  Also, the way Jest handles the `--bail` option makes it hard to pinpoint where an error occurred (see [jest#6527](https://github.com/facebook/jest/issues/6527)).  Jest is also moderately difficult to set up with Puppeteer.  These issues combine in making it very difficult to use Jest as an integration test runner.
+Jest is great, I use it extensively for unit testing React app code.  However, when it comes to running integration tests that take image snapshots for visual regression testing, it's not so good.  The Jest API doesn't provide a way to get information about individual test cases starting or stopping (see [jest#4471](https://github.com/facebook/jest/issues/4471)).  The unit of work that jest reports on is a test file, not a single `test` (see [jest#6616](https://github.com/facebook/jest/issues/6616)).  Jest also does all kinds of strange things with stdout (see [jest#6718](https://github.com/facebook/jest/issues/6718), [jest#5918](https://github.com/facebook/jest/issues/5918)).  Also, the way Jest handles the `--bail` option makes it hard to pinpoint where an error occurred (see [jest#6527](https://github.com/facebook/jest/issues/6527)).  Jest is also moderately difficult to set up with Puppeteer.  These issues combine in making it very difficult to use Jest as an integration test runner for visual regression testing.
 
 Mocha is vastly simpler than Jest, and doesn't have many of these issues or restrictions, but it lacks out of the box snapshot support, and it also doesn't have the equivalent of `jest-image-snapshot`'s `toMatchImageSnapshot`.   So I've added them here, while mimicing Jest's API as much as possible to make migrating back to Mocha easier.
 
@@ -121,11 +121,14 @@ describe('image snapshot config', () => {
 })
 ```
 
-
 ## What's missing
-This is still using `expect` 1.20.x and doesn't yet have support for jest's mocking features or jest.setTimeout.  I'd also like to add a custom reporter that reports snapshot and image snapshot creation.
+Missing support for the following jest features:
+* All of jest's mocking features
+* `jest.setTimeout` (you can use mocha's `this.timeout(number)` instead)
+* `expect().toMatchInlineSnapshot()`;
+* `expect().toThrowErrorMatchingSnapshot()`,
+* `expect().toThrowErrorMatchingInlineSnapshot()`,
 
-## Other gotcha's
-This requires Mocha 6, which is currently in pre-release.
+If someone wants to lend a hand getting those implemented, I'd be thankful
 
 ## License: MIT

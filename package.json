@@ -1,6 +1,6 @@
 {
   "name": "mocha-ui-jest",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "A test interface for mocha that mimics jest's API",
   "main": "index.js",
   "author": "ian.b.taylor@gmail.com",
@@ -9,18 +9,18 @@
   "repository": "github:itaylor/mocha-ui-jest",
   "dependencies": {
     "dashify": "^2.0.0",
-    "expect": "1.20.x",
-    "jest-image-snapshot": "^2.8.1",
-    "jest-snapshot": "^24.1.0"
+    "expect": "24.8.0",
+    "jest-image-snapshot": "^2.9.0",
+    "jest-snapshot": "^24.8.0"
   },
   "peerDependencies": {
-    "mocha": "6.0.0-1"
+    "mocha": "^6.0.0"
   },
   "devDependencies": {
-    "eslint": "^5.13.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "mocha": "6.0.0-1",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.2",
+    "mocha": "6.2.0",
     "rimraf": "^2.6.3"
   },
   "scripts": {
