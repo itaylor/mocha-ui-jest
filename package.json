@@ -1,6 +1,6 @@
 {
   "name": "mocha-ui-jest",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A test interface for mocha that mimics jest's API",
   "main": "index.js",
   "author": "ian.b.taylor@gmail.com",
