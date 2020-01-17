@@ -34,7 +34,7 @@ function setTestContext(context) {
 }
 
 function setImageSnapshotConfig(config) {
-  imageConfig = Object.assign({}, imageConfigDefaults, config);
+  imageConfig = Object.assign({}, imageConfigDefaults, config); // eslint-disable-line prefer-object-spread
 }
 
 function toMatchImageSnapshot(actual) {
