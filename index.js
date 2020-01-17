@@ -5,6 +5,7 @@ const snapshotSupport = require('./snapshotSupport.js');
 const imageSnapshotSupport = require('./imageSnapshotSupport.js');
 const ImageSnapshotAccumulator = require('./ImageSnapshotAccumulator.js');
 const SnapshotAccumulator = require('./SnapshotAccumulator.js');
+const testContextSpy = require('./testContextSpy.js');
 
 const { Suite, Test, interfaces } = Mocha;
 /**
@@ -117,6 +118,7 @@ function jestInterface(suite) {
     function captureContext() {
       snapshotSupport.setTestContext(this);
       imageSnapshotSupport.setTestContext(this);
+      testContextSpy.setTestContext(this);
     }
 
     function shouldBeTested(testSuite) {
@@ -137,3 +139,4 @@ jestInterface.imageSnapshotSupport = imageSnapshotSupport;
 jestInterface.snapshotSupport = snapshotSupport;
 jestInterface.ImageSnapshotAccumulator = ImageSnapshotAccumulator;
 jestInterface.SnapshotAccumulator = SnapshotAccumulator;
+jestInterface.testContextSpy = testContextSpy;
