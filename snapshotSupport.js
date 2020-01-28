@@ -1,6 +1,9 @@
 const jestSnapshot = require('jest-snapshot');
 const { basename, dirname, relative } = require('path');
 const EventEmitter = require('events');
+const matcherUtils = require('jest-matcher-utils');
+const { iterableEquality, subsetEquality } = require('expect/build/utils.js');
+const { equals } = require('expect/build/jasmineUtils');
 const { buildTestContext, shouldUpdateSnapshots } = require('./utils.js');
 
 const events = {
@@ -42,6 +45,8 @@ function toMatchSnapshot(actual, name) {
   const snapshotStateAddedBefore = snapshotState.added;
   const snapshotStateUpdatedBefore = snapshotState.updated;
   const matcher = jestSnapshot.toMatchSnapshot.bind({
+    equals,
+    utils: { ...matcherUtils, iterableEquality, subsetEquality },
     snapshotState,
     currentTestName: currentContext.title,
   });

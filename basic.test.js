@@ -38,6 +38,23 @@ describe('basic test', () => {
       expect(Math.random()).toMatchSnapshot();
     }).toThrow(/Snapshot name: `Snapshot assertions fail by throwing 1`/);
   });
+
+  test('Snapshot assertions work when using expect.any to ignore certain properties', () => {
+    const obj = {
+      cool: 'string',
+      random: Math.random(),
+    };
+    expect(obj).toMatchSnapshot({
+      random: expect.any(Number),
+    });
+
+    obj.random = 'Now a string';
+    expect(() => {
+      expect(obj).toMatchSnapshot({
+        random: expect.any(Number),
+      });
+    }).toThrow(/Expected properties:/);
+  });
 });
 
 function sleep(ms) {

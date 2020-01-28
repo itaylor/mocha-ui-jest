@@ -2,6 +2,13 @@
 
 exports[`Snapshot assertions fail by throwing 1`] = `0.9360206344712325`;
 
+exports[`Snapshot assertions work when using expect.any to ignore certain properties 1`] = `
+Object {
+  "cool": "string",
+  "random": Any<Number>,
+}
+`;
+
 exports[`async tests with snapshots work 1`] = `
 Object {
   "before": "sleep",
