@@ -29,7 +29,7 @@ function setTestContext(context) {
   snapshotState = null;
 }
 
-function toMatchSnapshot(actual, name) {
+function toMatchSnapshot(...args) {
   if (!currentContext) {
     throw new Error('Missing `context` for toMatchSnapshot');
   }
@@ -50,7 +50,7 @@ function toMatchSnapshot(actual, name) {
     snapshotState,
     currentTestName: currentContext.title,
   });
-  const result = matcher(actual, name);
+  const result = matcher(...args);
   snapshotState.save();
   const snapshotStateAddedAfter = snapshotState.added;
   const snapshotStateUpdatedAfter = snapshotState.updated;

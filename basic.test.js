@@ -53,7 +53,7 @@ describe('basic test', () => {
       expect(obj).toMatchSnapshot({
         random: expect.any(Number),
       });
-    }).toThrow(/Expected properties:/);
+    }).toThrow(/Now a string/);
   });
 });
 
