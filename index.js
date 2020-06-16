@@ -56,6 +56,8 @@ function jestInterface(suite) {
       fn,
       isOnly: true,
     });
+    context.xdescribe = context.describe.skip;
+    context.fdescribe = context.describe.only;
 
     context.test = test;
     context.test.only = (title, fn) => {
@@ -68,6 +70,8 @@ function jestInterface(suite) {
       context.retries(n);
     };
     context.it = context.test;
+    context.xit = context.xtest = context.test.skip;
+    context.fit = context.ftest = context.test.only;
 
     function test(title, fn) {
       const s = suites[0];
