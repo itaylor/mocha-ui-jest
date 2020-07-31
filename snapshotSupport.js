@@ -4,7 +4,9 @@ const EventEmitter = require('events');
 const matcherUtils = require('jest-matcher-utils');
 const { iterableEquality, subsetEquality } = require('expect/build/utils.js');
 const { equals } = require('expect/build/jasmineUtils');
-const { buildTestContext, shouldUpdateSnapshots } = require('./utils.js');
+const mochaTestContext = require('mocha-test-context');
+
+const { shouldUpdateSnapshots } = require('./utils.js');
 
 const events = {
   SNAPSHOT_PASS: 'snapshotPass',
@@ -17,19 +19,14 @@ const emitter = new SnapshotEmitter();
 
 module.exports = {
   toMatchSnapshot,
-  setTestContext,
   emitter,
   events,
 };
 
-let currentContext;
 let snapshotState;
-function setTestContext(context) {
-  currentContext = buildTestContext(context);
-  snapshotState = null;
-}
 
 function toMatchSnapshot(...args) {
+  const currentContext = mochaTestContext();
   if (!currentContext) {
     throw new Error('Missing `context` for toMatchSnapshot');
   }
@@ -55,9 +52,7 @@ function toMatchSnapshot(...args) {
   const snapshotStateAddedAfter = snapshotState.added;
   const snapshotStateUpdatedAfter = snapshotState.updated;
   const resultObj = {
-    title: currentContext.title,
-    fullTitle: currentContext.fullTitle,
-    file: relative(process.cwd(), currentContext.file),
+    ...currentContext,
     snapshotFile: relative(process.cwd(), snapshotFile),
   };
   let evt = events.SNAPSHOT_FAIL;

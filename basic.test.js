@@ -1,6 +1,3 @@
-const fs = require('fs');
-const { makeNewRandomImageBuffer } = require('./pngutils.js');
-
 describe('basic test', () => {
   test('expect works', () => {
     expect(true).toBe(true);
@@ -20,23 +17,14 @@ describe('basic test', () => {
     expect({ after: 'sleep' }).toMatchSnapshot();
   });
 
-  test('multiple image assertions work', () => {
-    const buf1 = fs.readFileSync(`${__dirname}/fixtures/test-1.png`);
-    expect(buf1).toMatchImageSnapshot();
-    const buf2 = fs.readFileSync(`${__dirname}/fixtures/test-2.png`);
-    expect(buf2).toMatchImageSnapshot();
+  test('Mismatched Snapshots throw', async () => {
+    expect(() => {
+      expect({ rando: Math.random() }).toMatchSnapshot();
+    }).toThrow();
   });
 
-  test('Image assertions fail by throwing', () => {
-    expect(() => {
-      expect(makeNewRandomImageBuffer()).toMatchImageSnapshot();
-    }).toThrow(/Image snapshot did not match/);
-  });
-
-  test('Snapshot assertions fail by throwing', () => {
-    expect(() => {
-      expect(Math.random()).toMatchSnapshot();
-    }).toThrow(/Snapshot name: `Snapshot assertions fail by throwing 1`/);
+  test('not.toMatchSnapshot()', async () => {
+    expect({ rando: Math.random() }).not.toMatchSnapshot();
   });
 
   test('Snapshot assertions work when using expect.any to ignore certain properties', () => {

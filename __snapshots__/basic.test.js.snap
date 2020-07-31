@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Mismatched Snapshots throw 1`] = `
+Object {
+  "rando": 0.52062937444205,
+}
+`;
+
 exports[`Snapshot assertions fail by throwing 1`] = `0.9360206344712325`;
 
 exports[`Snapshot assertions work when using expect.any to ignore certain properties 1`] = `
@@ -29,6 +35,40 @@ Array [
 ]
 `;
 
+exports[`expect works while firing fail events 1`] = `
+Array [
+  Object {
+    "fails": 0.07817224272347789,
+  },
+]
+`;
+
+exports[`expect works while firing fail events 2`] = `
+Object {
+  "file": "snapshotEvents.test.js",
+  "fullTitle": "snapshot events test expect works while firing fail events",
+  "snapshotFile": "__snapshots__/snapshotEvents.test.js.snap",
+  "title": "expect works while firing fail events",
+}
+`;
+
+exports[`expect works while firing pass events 1`] = `
+Array [
+  Object {
+    "that": "this",
+  },
+]
+`;
+
+exports[`expect works while firing pass events 2`] = `
+Object {
+  "file": "snapshotEvents.test.js",
+  "fullTitle": "snapshot events test expect works while firing pass events",
+  "snapshotFile": "__snapshots__/snapshotEvents.test.js.snap",
+  "title": "expect works while firing pass events",
+}
+`;
+
 exports[`multiple snapshots in one test work 1`] = `
 Object {
   "foo": "bar",
@@ -38,5 +78,11 @@ Object {
 exports[`multiple snapshots in one test work 2`] = `
 Object {
   "bar": "foo",
+}
+`;
+
+exports[`not.toMatchSnapshot() 1`] = `
+Object {
+  "rando": 0.6218949284445379,
 }
 `;

@@ -2,10 +2,8 @@ const commonInterface = require('mocha/lib/interfaces/common.js');
 const expect = require('expect');
 const Mocha = require('mocha');
 const snapshotSupport = require('./snapshotSupport.js');
-const imageSnapshotSupport = require('./imageSnapshotSupport.js');
-const ImageSnapshotAccumulator = require('./ImageSnapshotAccumulator.js');
 const SnapshotAccumulator = require('./SnapshotAccumulator.js');
-const testContextSpy = require('./testContextSpy.js');
+require('mocha-test-context');
 
 const { Suite, Test, interfaces } = Mocha;
 /**
@@ -30,7 +28,6 @@ function jestInterface(suite) {
 
     expect.extend({
       toMatchSnapshot: snapshotSupport.toMatchSnapshot,
-      toMatchImageSnapshot: imageSnapshotSupport.toMatchImageSnapshot,
     });
     context.expect = expect;
     context.beforeAll = common.before;
@@ -70,8 +67,8 @@ function jestInterface(suite) {
       context.retries(n);
     };
     context.it = context.test;
-    context.xit = context.xtest = context.test.skip;
-    context.fit = context.ftest = context.test.only;
+    context.xit = context.xtest = context.test.skip; // eslint-disable-line no-multi-assign
+    context.fit = context.ftest = context.test.only; // eslint-disable-line no-multi-assign
 
     function test(title, fn) {
       const s = suites[0];
@@ -101,7 +98,6 @@ function jestInterface(suite) {
         }
       }
       if (typeof opts.fn === 'function') {
-        wireContextCapture();
         opts.fn.call(s);
         suites.shift();
       } else if (typeof opts.fn === 'undefined' && !s.pending) {
@@ -110,19 +106,6 @@ function jestInterface(suite) {
         suites.shift();
       }
       return s;
-    }
-
-    function wireContextCapture() {
-      context.beforeAll(captureContext);
-      context.beforeEach(captureContext);
-      context.afterAll(captureContext);
-      context.afterEach(captureContext);
-    }
-
-    function captureContext() {
-      snapshotSupport.setTestContext(this);
-      imageSnapshotSupport.setTestContext(this);
-      testContextSpy.setTestContext(this);
     }
 
     function shouldBeTested(testSuite) {
@@ -139,8 +122,5 @@ function jestInterface(suite) {
 module.exports = jestInterface;
 interfaces.jest = jestInterface;
 jestInterface.description = 'Jest style test with expect and snapshots';
-jestInterface.imageSnapshotSupport = imageSnapshotSupport;
 jestInterface.snapshotSupport = snapshotSupport;
-jestInterface.ImageSnapshotAccumulator = ImageSnapshotAccumulator;
 jestInterface.SnapshotAccumulator = SnapshotAccumulator;
-jestInterface.testContextSpy = testContextSpy;
